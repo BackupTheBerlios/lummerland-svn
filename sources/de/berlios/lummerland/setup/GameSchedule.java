@@ -21,7 +21,10 @@
 package de.berlios.lummerland.setup;
 
 import de.berlios.lummerland.Game;
+import de.berlios.lummerland.graphics.Color;
+import de.berlios.lummerland.schedule.Schedule;
 import de.berlios.lummerland.schedule.ScheduleComposite;
+import de.berlios.lummerland.stock.StockRound;
 
 /**
  * @author Joerg Zuther
@@ -32,10 +35,19 @@ public class GameSchedule extends ScheduleComposite
 	/**
 	 * Constructor for GameSchedule.
 	 * @param game
+	 * @param parent
 	 */
-	public GameSchedule(Game game)
+	public GameSchedule(Game game, ScheduleComposite parent)
 	{
-		super(game, "Game", null);
-		addSchedule(new PreparationSchedule(game, this));
+		super(game, "Game", parent);
 	}
+	
+    protected void preAllChildrenRun() {
+	    game.setPriorityDealHolder(game.getPlayer(Color.Red));
+    }
+
+    protected Schedule createNextSchedule() {
+        game.setYear(game.getYear() + 1);
+		return new StockRound(game, this, game.getYear ());
+    }
 }

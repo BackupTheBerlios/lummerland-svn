@@ -36,8 +36,6 @@ import de.berlios.lummerland.gui.layout.LayoutFactory;
  */
 public class PlayerWindowArea extends Canvas {
 
-    private DecisionAdapter decisionAdapter;
-
     //	private Game game;
 
     public PlayerWindowArea(Composite parent, Game game) {
@@ -49,15 +47,6 @@ public class PlayerWindowArea extends Canvas {
 
         new PlayerAdapter(this, game);
 
-        decisionAdapter = new DecisionAdapter(this, game);
-        //decisionAdapter.setSize(180, 180);
-    }
-
-    /**
-     * @return
-     */
-    public DecisionAdapter getDecisionAdapter() {
-        return decisionAdapter;
     }
 
 }

@@ -24,6 +24,7 @@ package de.berlios.lummerland.gui;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
@@ -34,38 +35,52 @@ import org.eclipse.swt.widgets.Display;
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.Lummerland;
 import de.berlios.lummerland.gui.action.ExitAction;
+import de.berlios.lummerland.gui.action.RedoAction;
+import de.berlios.lummerland.gui.action.UndoAction;
 import de.berlios.lummerland.gui.board.hex.HexMapAdapter;
 import de.berlios.lummerland.gui.layout.LayoutFactory;
+import de.berlios.lummerland.gui.tree.TreeViewableViewer;
+import de.berlios.lummerland.gui.tree.XmlNodeViewer;
 
-public class MainWindow extends ApplicationWindow {
+public class MainWindow extends ApplicationWindow implements Runnable {
 
     //	Display display; // The display
 
     //	Shell shell; // The shell
 
-    Game game;
-
-    DecisionAdapter decisionAdapter;
+    private Game game;
 
     public MainWindow(final Game game) {
 
         super(null);
 
         this.game = game;
+
+        setBlockOnOpen(true);
+
+        addMenuBar();
     }
 
     protected Control createContents(Composite parent) {
-        
-        parent.setLayout(LayoutFactory.getVerticalLayout());
 
-        new PlayerWindowArea(parent, game);
+        parent.setLayout(LayoutFactory.getHorizontalLayout());
 
-//        decisionAdapter = pwa.getDecisionAdapter();
+        new XmlNodeViewer(parent, game.getConfig().getDocument());
 
-        new HexMapAdapter(parent, game.getBoard());
+        new TreeViewableViewer(parent, game.getRootSchedule());
 
-        parent.getShell().setText ("Lummerland");
-        
+        Composite composite = new Composite(parent, SWT.BORDER);
+
+        composite.setLayout(LayoutFactory.getVerticalLayout());
+
+        new PlayerWindowArea(composite, game);
+
+        //        decisionAdapter = pwa.getDecisionAdapter();
+
+        new HexMapAdapter(composite, game.getBoard());
+
+        parent.getShell().setText("Lummerland");
+
         parent.addDisposeListener(new DisposeListener() {
 
             public void widgetDisposed(DisposeEvent arg0) {
@@ -74,48 +89,43 @@ public class MainWindow extends ApplicationWindow {
             }
         });
 
+        parent.addKeyListener(new RootKeyAdapter(game));
+
         return parent;
     }
-    
-    
 
     protected MenuManager createMenuManager() {
+
         MenuManager menuBar = new MenuManager();
+
         MenuManager fileMenu = new MenuManager("&File");
-//        MenuManager helpMenu = new MenuManager("&Help");
-        
-        fileMenu.add(new MenuManager("&New"));
-//        fileMenu.add(new Separator());
-        fileMenu.add(new ExitAction (this));
-        
         menuBar.add(fileMenu);
-//        menuBar.add(helpMenu);
         
+        fileMenu.add(new ExitAction(this));
+
+        MenuManager controlFlowMenu = new MenuManager("&Action");
+        menuBar.add(controlFlowMenu);
+        
+        controlFlowMenu.add(new UndoAction (game));
+        controlFlowMenu.add(new RedoAction (game));
+
         return menuBar;
-    }
-    
-    public void show() {
-        //shell.pack
-
-        setBlockOnOpen(true);
-        
-        addMenuBar ();
-
-        open();
-
-        // Kill the window
-        Display.getCurrent().dispose();
     }
 
     public Point computeSize(int wHint, int hHint, boolean changed) {
         return new Point(1000, 900);
     }
 
-    /**
-     * @return DecisionAdapter
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Runnable#run()
      */
-    public DecisionAdapter getDecisionAdapter() {
-        return decisionAdapter;
+    public void run() {
+        open();
+
+        // Kill the window
+        Display.getDefault().dispose();
     }
 
 }

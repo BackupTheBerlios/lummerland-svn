@@ -18,7 +18,7 @@ public class Company implements ICompany {
     public String getName() {
         return name;
     }
-    private Game game;
+//    private Game game;
     private String name;
 
     /**
@@ -27,7 +27,7 @@ public class Company implements ICompany {
      */
     public Company(Game game, String name) {
         
-        this.game = game;
+//        this.game = game;
         this.name = name;
         game.addCompany (this);
     }

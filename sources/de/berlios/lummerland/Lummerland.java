@@ -41,13 +41,19 @@ public class Lummerland
 	public Lummerland()
 	{
         ursuppe = this;
-		//Game
 		Game game = new Game();
 		mainWindow = new MainWindow(game);
-		// for testing
-		Thread gameThread = new Thread(game, "Lummerland");
-		gameThread.start();
-		mainWindow.show();
+
+		new Thread(mainWindow, "GUI").start();
+		
+		try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+		
+		game.execute ();
+		
 	}
 	public static void main(String[] args)
 	{

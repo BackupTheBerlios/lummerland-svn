@@ -44,8 +44,7 @@ public class MoneyAdapter implements MoneyListener {
      */
     public void updateMoney() {
 
-        Display d = Display.getCurrent();
-        d.asyncExec(new Runnable() {
+        Display.getDefault().asyncExec(new Runnable() {
             public void run() {
                 money.setText("Money: " + player.getMoney());
                 money.pack();

@@ -18,30 +18,50 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.test.schedule;
+/*
+ * Created on Jun 19, 2004
+ *
+ */
+package de.berlios.lummerland.gui;
+
+import java.util.Iterator;
+
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 
 import de.berlios.lummerland.Game;
-import de.berlios.lummerland.decision.Decision;
-import de.berlios.lummerland.schedule.DecisionProducer;
-import de.berlios.lummerland.schedule.ScheduleComposite;
+import de.berlios.lummerland.player.Player;
+import de.berlios.lummerland.stock.IStockTradeListener;
+import de.berlios.lummerland.stock.IStockTradingController;
 
-/**
- * @author Joerg Zuther
- */
-public class DummyDecisionProducer extends DecisionProducer {
 
-	/**
-	 * Constructor for ScheduleComposite.
-	 * @param game, parent
-	 */
-	public DummyDecisionProducer(Game game, String name, ScheduleComposite parent) {
-		super(game, name, parent);
-	}
+class RootKeyAdapter extends KeyAdapter implements
+        IStockTradeListener {
 
-	/**
-	 * Method createDecision.
-	 */
-	protected Decision createDecision(){
-		return null;
-	}
+    private IStockTradingController controller;
+
+    /**
+     * @param game
+     */
+    public RootKeyAdapter(Game game) {
+
+        for (Iterator iter = game.getPlayers().iterator(); iter.hasNext();) {
+            Player player = (Player) iter.next();
+            player.addStockTradeListener(this);
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.character == ' ') {
+            controller.pass();
+        }
+    }
+
+    public void activateStockTrading(IStockTradingController controller) {
+        this.controller = controller;
+    }
+
+    public void deactivateStockTrading() {
+        controller = null;
+    }
 }

@@ -23,11 +23,10 @@ package de.berlios.lummerland.schedule;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.eclipse.jface.util.Assert;
-
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.Lummerland;
-import de.berlios.lummerland.decision.Decision;
+import de.berlios.lummerland.exception.AssertionFailedException;
+import de.berlios.lummerland.schedule.model.IControlFlowModel;
 
 /**
  * @author Joerg Zuther
@@ -35,174 +34,171 @@ import de.berlios.lummerland.decision.Decision;
 
 public abstract class ScheduleComposite extends Schedule {
 
-	private final int ReadyIndex = -1;
+    private final int ReadyIndex = -1;
 
-	protected List schedules = new ArrayList();
-	protected int schedulesIndex = ReadyIndex;
+    protected List children = new ArrayList();
 
-	/**
-	 * Constructor for ScheduleComposite.
-	 * @param game
-	 * @param name
-	 * @param parent
-	 */
-	public ScheduleComposite(
-		Game game,
-		String name,
-		ScheduleComposite parent) {
-		super(game, name, parent);
-	}
+    protected int cursorIndex = ReadyIndex;
 
-	/**
-	 * method addSchedule.
-	 * @param s
-	 */
-	public void addSchedule(Schedule s) {
-		schedules.add(s);
-	}
+    /**
+     * Constructor for ScheduleComposite.
+     * 
+     * @param game
+     * @param name
+     * @param parent
+     */
+    public ScheduleComposite(Game game, String name, ScheduleComposite parent) {
+        super(game, name, parent);
+    }
 
-	/**
-	 * method removeLastSchedule.
-	 */
-	public void removeLastSchedule() {
-		schedules.remove(getNumberOfSchedules() - 1);
-	}
+    /**
+     * method addSchedule.
+     * 
+     * @param s
+     */
+    public void addAfterLastChild(Schedule s) {
+        children.add(s);
+        getTreeModel().fireAddChild(s);
+    }
 
-	/**
-	 * method getNumberOfSchedules.
-	 * @return int
-	 */
-	public int getNumberOfSchedules() {
-		return schedules.size();
-	}
+    /**
+     * method removeLastSchedule.
+     */
+    public void removeLastChild() {
+        Schedule s = (Schedule) children.get(getChildCount() - 1);
+        children.remove(s);
+        s.getTreeModel().fireRemove();
+    }
 
-	/**
-	 * @return int
-	 */
-	public int getSchedulesIndex() {
-		return schedulesIndex;
-	}
+    /**
+     * method getNumberOfSchedules.
+     * 
+     * @return int
+     */
+    public int getChildCount() {
+        return children.size();
+    }
 
-	/**
-	 * Sets the schedulesIndex.
-	 * @param schedulesIndex The schedulesIndex to set
-	 */
-	public void setSchedulesIndex(int schedulesIndex) {
-		this.schedulesIndex = schedulesIndex;
-	}
+    /**
+     * @return int
+     */
+    public int getCursorIndex() {
+        return cursorIndex;
+    }
 
-	/**
-	* @see de.berlios.lummerland.schedule.Schedule#execute()
-	*/
-	public final void execute(String callerName) {
-		Lummerland.getLogger().info(
-			name + ".execute() started from " + callerName);
+    /**
+     * Sets the schedulesIndex.
+     * 
+     * @param schedulesIndex
+     *            The schedulesIndex to set
+     */
+    public void setCursorIndex(int schedulesIndex) {
+        this.cursorIndex = schedulesIndex;
+    }
 
-		if (game.getState() == Game.StopRequested) {
-			return;
-		}
-		if (!hasCorrectSchedulesIndex()) {
-			Lummerland.getLogger().error(
-				"Illegal schedulesIndex "
-					+ schedulesIndex
-					+ " when getNumberOfSchedules() was "
-					+ getNumberOfSchedules()
-					+ " and Game.getState() was "
-					+ game.getState());
-			return;
-		}
+    /**
+     * @see de.berlios.lummerland.schedule.Schedule#execute()
+     */
+    public final void execute(String callerName) {
 
-		setSchedulesIndex(getSchedulesIndex() + game.getIndexModifierByState());
-		while (getSchedulesIndex() > ReadyIndex
-			&& getSchedulesIndex() < getNumberOfSchedules()) {
-			Schedule s = (Schedule) schedules.get(schedulesIndex);
-			switch (game.getState()) {
-				case Game.Running :
-					executeRun(s);
-					break;
-				case Game.Undoing :
-					executeUndo(s);
-					break;
-				case Game.Redoing :
-					setSchedulesIndex(executeRedo(getSchedulesIndex(), s));
-					break;
-				default :
-					break;
-			}
-			setSchedulesIndex(
-				getSchedulesIndex() + game.getIndexModifierByState());
-		}
+        if (game.isRunning()) {
+            preAllChildrenRun();
+        }
 
-		Lummerland.getLogger().info(
-			name + ".execute() finished - was started by " + callerName);
-	}
+        Lummerland.getLogger().info(
+                name + ".execute() started from " + callerName);
 
-	private boolean hasCorrectSchedulesIndex() {
-		switch (game.getState()) {
-			case Game.Running :
-			case Game.Redoing :
-				return schedulesIndex == ReadyIndex;
-			case Game.Undoing :
-				return schedulesIndex == getNumberOfSchedules();
-			default :
-				return false;
-		}
-	}
+        if (game.getState() == IControlFlowModel.StopRequested) {
+            return;
+        }
+        if (!hasCorrectSchedulesIndex()) {
+            throw new AssertionFailedException("Illegal cursorIndex "
+                    + cursorIndex + " when getNumberOfSchedules() was "
+                    + getChildCount() + " and Game.getState() was "
+                    + game.getState());
+        }
 
-	private void executeRun(Schedule s) {
-		if (s instanceof DecisionProducer) {
-			s.execute(name);
-			Decision d = ((DecisionProducer) s).getDecision();
-//			Assert.isNotNull(d);
-			if (!(s instanceof ConfirmationItem)) {
-				game.getDecisionStack().push(name, d);
-			}
-			/** 
-			 * The following means either a human or ai player to choose
-			 * from the alternatives as specified by the decision; in case
-			 * of a human player it is possible that the Undo-Button or Redo-
-			 * Button becomes hit...
-			 */
-			d.evaluate();
-			/**
-			 * ...such that the state of the game could be changed here.
-			 */
-			if (game.getState() == Game.Running) {
-				game.getDecisionStack().cut();
-			}
-		} else if (s instanceof DecisionConsumer) {
-			((DecisionConsumer) s).setDecision(
-				game.getDecisionStack().next(name));
-			s.execute(name);
-		} else {
-			s.execute(name);
-		}
-	}
+        setCursorIndex(getCursorIndex() + game.getIndexModifierByState());
 
-	private void executeUndo(Schedule s) {
-		if (s instanceof DecisionProducer) {
-			game.getDecisionStack().next(name);
-		} else if (s instanceof DecisionConsumer) {
-			((DecisionConsumer) s).undo(name);
-			game.setState(Game.Running);
-		} else if (s instanceof ScheduleItem) {
-			((ScheduleItem) s).undo(name);
-		} else {
-			s.execute(name);
-		}
-	}
+        if (game.isRunning()) {
+            addNextschedule();
+        }
 
-	private int executeRedo(int i, Schedule s) {
-		if (s instanceof DecisionProducer) {
-			game.setState(Game.Running);
-			i--;
-		} else if (s instanceof DecisionConsumer) {
-			((DecisionConsumer) s).setDecision(
-				game.getDecisionStack().next(name));
-			s.execute(name);
-		} else {
-			s.execute(name);
-		}
-		return i;
-	}
+        while (getCursorIndex() > ReadyIndex
+                && getCursorIndex() < getChildCount()) {
+            Schedule s = (Schedule) children.get(cursorIndex);
+            
+            IControlFlowModel model = game.getControlFlowModel();
+            
+            switch (model.getNextAction ()) {
+            case IControlFlowModel.Running:
+                s.execute(name);
+                addNextschedule();
+                break;
+            case IControlFlowModel.Undoing:
+                executeUndo(s);
+                break;
+            case IControlFlowModel.Redoing:
+                s.execute(name);
+                break;
+            default:
+                break;
+            }
+            setCursorIndex(getCursorIndex() + game.getIndexModifierByState());
+        }
+
+        if (game.isRunning()) {
+            postAllChildrenRun();
+        }
+        Lummerland.getLogger().info(
+                name + ".execute() finished - was started by " + callerName);
+    }
+
+    /**
+     *  
+     */
+    private void addNextschedule() {
+        Schedule next = createNextSchedule();
+        if (next != null) {
+            addAfterLastChild(next);
+        }
+    }
+
+    protected Schedule createNextSchedule() {
+        return null;
+    }
+
+    protected void preAllChildrenRun() {
+    }
+
+    protected void postAllChildrenRun() {
+    }
+
+    private boolean hasCorrectSchedulesIndex() {
+        switch (game.getState()) {
+        case IControlFlowModel.Running:
+        case IControlFlowModel.Redoing:
+            return cursorIndex == ReadyIndex;
+        case IControlFlowModel.Undoing:
+            return cursorIndex == getChildCount();
+        default:
+            return false;
+        }
+    }
+
+    private void executeUndo(Schedule s) {
+        if (s instanceof ScheduleItem) {
+            ((ScheduleItem) s).rawUndo(name);
+        } else {
+            s.execute(name);
+        }
+    }
+
+    public List getChildren() {
+        return children;
+    }
+
+    protected boolean hasChildren() {
+        return children.size() > 0;
+    }
 }

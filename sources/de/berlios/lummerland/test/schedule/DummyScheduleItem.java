@@ -48,7 +48,7 @@ public final class DummyScheduleItem extends ScheduleItem {
 	/**
 	 * Method executeBody.
 	 */
-	protected void executeBody() {
+	protected void run() {
 		executeVisited = true;
 		executeGameState = game.getState();
 	}
@@ -56,7 +56,7 @@ public final class DummyScheduleItem extends ScheduleItem {
 	/**
 	 * Method undoBody.
 	 */
-	protected void undoBody() {
+	protected void undo() {
 		undoVisited = true;
 		undoGameState = game.getState();
 	}

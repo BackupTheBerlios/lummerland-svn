@@ -6,7 +6,6 @@ package de.berlios.lummerland.gui.stock;
 
 import org.eclipse.jface.action.Action;
 
-import de.berlios.lummerland.gui.StockAdapter;
 
 /**
  * @author Gregor

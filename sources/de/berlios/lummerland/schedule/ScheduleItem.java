@@ -19,13 +19,22 @@
 /**************************************************************************/
 
 package de.berlios.lummerland.schedule;
+import java.util.List;
+
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.Lummerland;
+import de.berlios.lummerland.schedule.model.IControlFlowModel;
 /**
  * @author Joerg Zuther
  */
 public abstract class ScheduleItem extends Schedule
 {
+    public List getChildren() {
+        return null;
+    }
+    protected boolean hasChildren() {
+        return false;
+    }
 	/**
 	 * Constructor for ScheduleItem.
 	 * @param game
@@ -42,7 +51,7 @@ public abstract class ScheduleItem extends Schedule
 	public final void execute(String callerName)
 	{
 		Lummerland.getLogger().info(name + ".execute() started from " + callerName);
-		if (game.getState() == Game.Undoing)
+		if (game.getState() == IControlFlowModel.Undoing)
 		{
 			Lummerland.getLogger().error(
 				callerName
@@ -62,7 +71,7 @@ public abstract class ScheduleItem extends Schedule
 			return;
 		}
 		state = Busy;
-		executeBody();
+		run();
 		state = Finished;
 		Lummerland.getLogger().info(
 			name + ".execute() finished - was started by " + callerName);
@@ -70,13 +79,13 @@ public abstract class ScheduleItem extends Schedule
 	/**
 	 * Method executeBody.
 	 */
-	protected abstract void executeBody();
+	protected abstract void run();
 	/**
 	 * Method undo.
 	 */
-	public final void undo(String callerName)
+	public final void rawUndo(String callerName)
 	{
-		if (game.getState() != Game.Undoing)
+		if (game.getState() != IControlFlowModel.Undoing)
 		{
 			Lummerland.getLogger().error(
 				callerName
@@ -96,11 +105,11 @@ public abstract class ScheduleItem extends Schedule
 			return;
 		}
 		state = Busy;
-		undoBody();
+		undo();
 		state = Ready;
 	}
 	/**
 	 * Method undoBody.
 	 */
-	protected abstract void undoBody();
+	protected abstract void undo();
 }

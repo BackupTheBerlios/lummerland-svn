@@ -32,4 +32,5 @@ public final class DummyScheduleComposite extends ScheduleComposite {
 	public DummyScheduleComposite(Game game, String name, ScheduleComposite parent) {
 		super(game, name, parent);
 	}
+
 }

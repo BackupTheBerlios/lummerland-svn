@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.company.ICompany;
+import de.berlios.lummerland.gui.stock.StockAdapter;
 import de.berlios.lummerland.player.Player;
 
 /**

@@ -2,7 +2,7 @@
  * Created on Jun 15, 2004
  *
  */
-package de.berlios.lummerland.gui;
+package de.berlios.lummerland.gui.stock;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
@@ -12,8 +12,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
 
 import de.berlios.lummerland.company.ICompany;
-import de.berlios.lummerland.gui.stock.BuyInitAction;
-import de.berlios.lummerland.gui.stock.PassAction;
+import de.berlios.lummerland.gui.ISpecificStockListener;
 import de.berlios.lummerland.player.Player;
 import de.berlios.lummerland.stock.IStockTradeListener;
 import de.berlios.lummerland.stock.IStockTradingController;
@@ -37,6 +36,8 @@ public class StockAdapter implements ISpecificStockListener,
      */
     public StockAdapter(Composite parent, Player player, ICompany company) {
 
+        this.company = company;
+
         player.addSpecificStockListener(this);
 
         player.addStockTradeListener(this);
@@ -46,12 +47,13 @@ public class StockAdapter implements ISpecificStockListener,
 
         MenuManager manager = new MenuManager();
 
-        manager.add(new BuyInitAction(this));
+        manager.add(new BuyInitContextMenuEntry(this));
         manager.add(new PassAction(this));
 
         Menu contextMenu = manager.createContextMenu(stock);
 
         stock.setMenu(contextMenu);
+
     }
 
     /*
@@ -61,7 +63,7 @@ public class StockAdapter implements ISpecificStockListener,
      */
     public void updatePercentage(final int percentage) {
 
-        Display.getCurrent().asyncExec(new Runnable() {
+        Display.getDefault().asyncExec(new Runnable() {
             public void run() {
                 setText(percentage);
             }
@@ -113,11 +115,11 @@ public class StockAdapter implements ISpecificStockListener,
     }
 
     /**
-     * 
+     *  
      */
     public void pass() {
         if (controller != null) {
-            controller.pass ();
+            controller.pass();
         }
     }
 }

@@ -134,6 +134,9 @@ public class Player implements ICertificateHolder {
     public String getName() {
         return name;
     }
+    public String toString () {
+        return getName();
+    }
 
     /**
      * Sets the name.
@@ -197,6 +200,10 @@ public class Player implements ICertificateHolder {
             IStockTradeListener l = (IStockTradeListener) iter.next();
             l.deactivateStockTrading();
         }
+    }
+
+    public Player getNextPlayer() {
+        return game.getNextPlayer (this); 
     }
 
 }

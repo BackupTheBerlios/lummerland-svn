@@ -6,17 +6,16 @@ package de.berlios.lummerland.gui.stock;
 
 import org.eclipse.jface.action.Action;
 
-import de.berlios.lummerland.gui.StockAdapter;
 
 /**
  * @author Gregor
  *  
  */
-public class BuyInitAction extends Action {
+public class BuyInitContextMenuEntry extends Action {
 
     private StockAdapter adapter;
 
-    public BuyInitAction(StockAdapter adapter) {
+    public BuyInitContextMenuEntry(StockAdapter adapter) {
         this.adapter = adapter;
         setText("Buy &Init");
         setToolTipText("Buy one share from the IPO");

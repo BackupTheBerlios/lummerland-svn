@@ -4,10 +4,7 @@
  */
 package de.berlios.lummerland.gui.action;
 
-import java.net.URL;
-
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.ApplicationWindow;
 
 /**
@@ -21,12 +18,12 @@ public class ExitAction extends Action {
         window = w;
         setText("E&xit@Ctrl+W");
         setToolTipText("Exit the application");
-        try {
-            setImageDescriptor(ImageDescriptor.createFromURL(new URL(
-                    "file:icons/close.gif")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            setImageDescriptor(ImageDescriptor.createFromURL(new URL(
+//                    "file:icons/close.gif")));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void run() {

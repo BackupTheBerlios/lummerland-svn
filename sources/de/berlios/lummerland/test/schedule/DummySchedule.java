@@ -20,6 +20,8 @@
 
 package de.berlios.lummerland.test.schedule;
 
+import java.util.List;
+
 import de.berlios.lummerland.schedule.Schedule;
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.schedule.ScheduleComposite;
@@ -54,4 +56,14 @@ public final class DummySchedule extends Schedule {
 		this.visited = visited;
 	}
 
+    /* (non-Javadoc)
+     * @see de.berlios.lummerland.schedule.Schedule#getChildren()
+     */
+    public List getChildren() {
+        return null;
+    }
+
+    protected boolean hasChildren() {
+        return false;
+    }
 }

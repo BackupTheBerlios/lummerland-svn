@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.berlios.lummerland.Game;
+import de.berlios.lummerland.schedule.model.IControlFlowModel;
 import junit.framework.TestCase;
 /**
  * @author Zuther
@@ -38,8 +39,6 @@ public class ScheduleCompositeTest extends TestCase {
 	private DummyScheduleComposite testScheduleComposite;
 	private List dummySchedules = new ArrayList();
 	private DummyScheduleItem dummyScheduleItem;
-	private DummyDecisionProducer dummyDecisionProducer;
-	private DummyDecisionConsumer dummyDecisionConsumer;
 	private Game game;
 	private String name;
 
@@ -72,16 +71,6 @@ public class ScheduleCompositeTest extends TestCase {
 				game,
 				"DummyScheduleItem",
 				testScheduleComposite);
-		dummyDecisionProducer =
-			new DummyDecisionProducer(
-				game,
-				"DummyDecisionProducer",
-				testScheduleComposite);
-		dummyDecisionConsumer =
-			new DummyDecisionConsumer(
-				game,
-				"DummyDecisionConsumer",
-				testScheduleComposite);
 	}
 
 	/**
@@ -98,22 +87,22 @@ public class ScheduleCompositeTest extends TestCase {
 		assertEquals(
 			"No schedules expected",
 			0,
-			testScheduleComposite.getNumberOfSchedules());
+			testScheduleComposite.getChildCount());
 	}
 
 	public void testAddAndRemoveSchedule() {
 		try {
-			testScheduleComposite.removeLastSchedule();
+			testScheduleComposite.removeLastChild();
 			fail("ScheduleComposite.removeLastSchedule returned no error despite of an list expected to be empty");
 		} catch (IndexOutOfBoundsException e) {
 		}
-		assertEquals(0, testScheduleComposite.getNumberOfSchedules());
+		assertEquals(0, testScheduleComposite.getChildCount());
 
 		addDummySchedules(1);
-		assertEquals(1, testScheduleComposite.getNumberOfSchedules());
+		assertEquals(1, testScheduleComposite.getChildCount());
 
-		testScheduleComposite.removeLastSchedule();
-		assertEquals(0, testScheduleComposite.getNumberOfSchedules());
+		testScheduleComposite.removeLastChild();
+		assertEquals(0, testScheduleComposite.getChildCount());
 	}
 
 	public void testExecuteNoSchedule() {
@@ -134,7 +123,7 @@ public class ScheduleCompositeTest extends TestCase {
 
 	private void addDummySchedules(int nods) {
 		for (int i = 0; i < nods; i++) {
-			testScheduleComposite.addSchedule(
+			testScheduleComposite.addAfterLastChild(
 				(DummySchedule) dummySchedules.get(i));
 		}
 	}
@@ -143,24 +132,24 @@ public class ScheduleCompositeTest extends TestCase {
 		addDummySchedules(numberOfDummySchedules);
 		assertEquals(
 			numberOfDummySchedules,
-			testScheduleComposite.getNumberOfSchedules());
+			testScheduleComposite.getChildCount());
 
 		assertExecute(
 			numberOfDummySchedules,
-			Game.Running,
-			Game.Running,
+			IControlFlowModel.Running,
+			IControlFlowModel.Running,
 			-1,
 			numberOfDummySchedules);
 		assertExecute(
 			numberOfDummySchedules,
-			Game.Undoing,
-			Game.Undoing,
+			IControlFlowModel.Undoing,
+			IControlFlowModel.Undoing,
 			numberOfDummySchedules,
 			-1);
 		assertExecute(
 			numberOfDummySchedules,
-			Game.Redoing,
-			Game.Redoing,
+			IControlFlowModel.Redoing,
+			IControlFlowModel.Redoing,
 			-1,
 			numberOfDummySchedules);
 	}
@@ -171,7 +160,7 @@ public class ScheduleCompositeTest extends TestCase {
 		int expectedGameState,
 		int initialIndex,
 		int expectedIndex) {
-		assertEquals(initialIndex, testScheduleComposite.getSchedulesIndex());
+		assertEquals(initialIndex, testScheduleComposite.getCursorIndex());
 
 		game.setState(gameState);
 
@@ -180,28 +169,28 @@ public class ScheduleCompositeTest extends TestCase {
 		for (int i = 0; i < numberOfDummySchedules; i++) {
 			assertTrue(((DummySchedule) dummySchedules.get(i)).isVisited());
 		}
-		assertEquals(expectedIndex, testScheduleComposite.getSchedulesIndex());
+		assertEquals(expectedIndex, testScheduleComposite.getCursorIndex());
 		assertEquals(expectedGameState, game.getState());
 	}
 
 	public void testExecuteWithScheduleItem() {
-		testScheduleComposite.addSchedule(dummyScheduleItem);
+		testScheduleComposite.addAfterLastChild(dummyScheduleItem);
 
 		assertExecuteWithScheduleItem(
-			Game.Running,
-			Game.Running,
+			IControlFlowModel.Running,
+			IControlFlowModel.Running,
 			-1,
 			true,
 			false);
 		assertExecuteWithScheduleItem(
-			Game.Undoing,
+			IControlFlowModel.Undoing,
 			-1,
-			Game.Undoing,
+			IControlFlowModel.Undoing,
 			false,
 			true);
 		assertExecuteWithScheduleItem(
-			Game.Redoing,
-			Game.Redoing,
+			IControlFlowModel.Redoing,
+			IControlFlowModel.Redoing,
 			-1,
 			true,
 			false);
@@ -234,36 +223,4 @@ public class ScheduleCompositeTest extends TestCase {
 		assertEquals(expectedIsUndoVisited, dummyScheduleItem.isUndoVisited());
 	}
 
-	public void testExecuteWithDecisionProducerAndConsumer() {
-		testScheduleComposite.addSchedule(dummyDecisionProducer);
-		testScheduleComposite.addSchedule(dummyDecisionConsumer);
-
-		assertExecuteWithDecisionProducerAndConsumer(
-			Game.Running,
-			Game.Running,
-			-1,
-			true,
-			false);
-		assertExecuteWithDecisionProducerAndConsumer(
-			Game.Undoing,
-			-1,
-			Game.Undoing,
-			false,
-			true);
-		assertExecuteWithDecisionProducerAndConsumer(
-			Game.Redoing,
-			Game.Redoing,
-			-1,
-			true,
-			false);
-	}
-
-	private void assertExecuteWithDecisionProducerAndConsumer(
-		int gameState,
-		int expectedExecuteGameState,
-		int expectedUndoGameState,
-		boolean expectedIsExecuteVisited,
-		boolean expectedIsUndoVisited) {
-		//todo implement DecisionProducerAndConsumerTest
-	}
 }

@@ -18,39 +18,26 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.schedule;
-
-import java.util.ArrayList;
-import java.util.List;
+package de.berlios.lummerland.setup;
 
 import de.berlios.lummerland.Game;
-import de.berlios.lummerland.decision.Choice;
-import de.berlios.lummerland.decision.Confirmation;
-import de.berlios.lummerland.decision.Decision;
+import de.berlios.lummerland.schedule.ScheduleComposite;
 
 /**
  * @author Joerg Zuther
  */
-public abstract class ConfirmationItem extends DecisionProducer {
 
+public class RootSchedule extends ScheduleComposite
+{
 	/**
-	 * Constructor for ScheduleComposite.
-	 * @param game, parent
+	 * Constructor for GameSchedule.
+	 * @param game
 	 */
-	public ConfirmationItem(Game game, String name, ScheduleComposite parent) {
-		super(game, name, parent);
+	public RootSchedule(Game game)
+	{
+		super(game, "invisible Root", null);
+	
+		addAfterLastChild(new GameSchedule(game, this));
 	}
 	
-    /* (non-Javadoc)
-     * @see de.zeitlinger.ursuppe.schedule.DecisionProducer#createDecision()
-     */
-    protected Decision createDecision() {
-		List choices = new ArrayList ();
-        choices.add(new Choice("confirm"));
-        String caller = ConfirmationItem.class.getName();
-        Decision d = new Confirmation(caller,getConfirmationString(),choices);
-        return d;
-    }
-
-	protected abstract String getConfirmationString();
 }
