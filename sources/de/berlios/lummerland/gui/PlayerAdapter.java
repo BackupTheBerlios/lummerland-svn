@@ -19,68 +19,97 @@
 /**************************************************************************/
 
 package de.berlios.lummerland.gui;
+
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
+import de.berlios.lummerland.Game;
 import de.berlios.lummerland.Lummerland;
-import de.berlios.lummerland.gui.layout.LayoutFactory;
+import de.berlios.lummerland.company.ICompany;
 import de.berlios.lummerland.player.MoneyListener;
 import de.berlios.lummerland.player.Player;
+
 /**
  * @author Joerg Zuther
  */
-public class PlayerAdapter
-	extends Canvas
-	implements MoneyListener {
-	private Text name;
-	private Text color;
+public class PlayerAdapter extends Canvas {
 
-	private Text money;
-	//	public SquareAdapter() {
-	//		super();
-	//	}
-	private Player player;
-	/**
-	 * Constructor for SquareAdapter.
-	 * @param arg0
-	 * @param arg1
-	 */
-	public PlayerAdapter(Composite parent, Player p) {
-		super(parent, SWT.BORDER);
-		setLayout(LayoutFactory.getVerticalLayout());
+    //	public SquareAdapter() {
+    //		super();
+    //	}
+    private Game game;
 
-		this.player = p;
+    /**
+     * Constructor for SquareAdapter.
+     * 
+     * @param arg0
+     * @param arg1
+     */
+    public PlayerAdapter(Composite parent, Game game) {
+        super(parent, SWT.BORDER);
 
-		name = new Text(this, SWT.DEFAULT);
-		name.setText("Name: " + player.getName());
+        this.game = game;
 
-		color = new Text(this, SWT.DEFAULT);
-		color.setText("Color: " + player.getColor().getDescription());
+        GridLayout gridLayout = new GridLayout();
 
-		money = new Text(this, SWT.DEFAULT);
-		money.setText("Money: " + player.getMoney());
+        Collection players = game.getPlayers();
+        gridLayout.numColumns = players.size() + 2;
 
-		player.addMoneyListener(this);
-	}
+        setLayout(gridLayout);
 
-	public Point computeSize(int wHint, int hHint, boolean changed) {
-		return new Point(180, 180);
-	}
+        Collection companies = game.getCompanies();
 
-	/**
-	 * @see de.zeitlinger.ursuppe.player.BioPointListener#updateScore()
-	 */
-	public void updateMoney() {
-		Display d = Lummerland.getInstance().getMainWindow().getDisplay();
-		d.asyncExec(new Runnable() {
-			public void run() {
-				money.setText("Score: " + player.getMoney());
-                money.pack();
-			}
-		});
-	}
+        new Text(this, SWT.PUSH).setText("Player");
+        new Text(this, SWT.PUSH).setText("Money");
+
+        for (Iterator iter = companies.iterator(); iter.hasNext();) {
+            ICompany company = (ICompany) iter.next();
+            new Text(this, SWT.PUSH).setText(company.getName());
+        }
+
+        for (Iterator iter = players.iterator(); iter.hasNext();) {
+            Player player = (Player) iter.next();
+
+            new Text(this, SWT.PUSH).setText(player.getName());
+
+            new MoneyAdapter(this, player);
+            
+            
+        }
+
+        new Button(this, SWT.PUSH).setText("B1");
+
+        new Button(this, SWT.PUSH).setText("Wide Button 2");
+
+        new Button(this, SWT.PUSH).setText("Button 3");
+
+        new Button(this, SWT.PUSH).setText("B4");
+
+        new Button(this, SWT.PUSH).setText("Button 5");
+
+        //        name = new Text(this, SWT.DEFAULT);
+        //        name.setText("Name: " + player.getName());
+        //
+        //        color = new Text(this, SWT.DEFAULT);
+        //        color.setText("Color: " + player.getColor().getDescription());
+        //
+        //        money = new Text(this, SWT.DEFAULT);
+        //        money.setText("Money: " + player.getMoney());
+        //
+        //        player.addMoneyListener(this);
+    }
+
+    public Point computeSize(int wHint, int hHint, boolean changed) {
+        return new Point(900, 180);
+    }
+
 }

@@ -33,50 +33,53 @@ import de.berlios.lummerland.board.tile.ITile;
 
 /**
  * @author Gregor
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ * To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Generation - Code and Comments
  */
 public class HexTile implements ITile {
 
+    private MapLocation location;
 
+    private Collection connections;
 
+    private Collection stations;
 
-	private MapLocation fLocation;
-	private Collection fConnections;
-	private Collection fStations;
-	
+    /**
+     * @param location
+     */
+    public HexTile(MapLocation location, Collection stations,
+            Collection connections) {
+        this.location = location;
+        this.stations = stations;
+        this.connections = connections;
+    }
 
-	/**
-	 * @param location
-	 */
-	public HexTile(MapLocation location, Collection stations, Collection connections) {
-		fLocation = location;
-		fStations = stations;
-		fConnections = connections;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.berlios.lummerland.board.tile.ITile#getStations()
+     */
+    public Collection getStations() {
+        return stations;
+    }
 
-	/* (non-Javadoc)
-	 * @see de.berlios.lummerland.board.tile.ITile#getStations()
-	 */
-	public Collection getStations() {
-		// TODO Auto-generated method stub
-		return fStations;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.berlios.lummerland.board.tile.ITile#getLocation()
+     */
+    public MapLocation getLocation() {
+        return location;
+    }
 
-	/* (non-Javadoc)
-	 * @see de.berlios.lummerland.board.tile.ITile#getLocation()
-	 */
-	public MapLocation getLocation() {
-		return fLocation;
-	}
-
-	/* (non-Javadoc)
-	 * @see de.berlios.lummerland.board.tile.ITile#getConnections()
-	 */
-	public Collection getConnections() {
-		// TODO Auto-generated method stub
-		return fConnections;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.berlios.lummerland.board.tile.ITile#getConnections()
+     */
+    public Collection getConnections() {
+        return connections;
+    }
 
 }

@@ -49,5 +49,4 @@ public class LayoutFactory {
 		layout.type = SWT.HORIZONTAL;
 		return layout;
 	}
-
 }

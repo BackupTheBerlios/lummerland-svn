@@ -53,7 +53,7 @@ public class Board
 	 * @return
 	 */
 	public Collection getTiles() {
-		// TODO Auto-generated method stub
+		
 		Collection stations = new ArrayList ();
 		
 		HexStation hexStation = new HexStation (10, 1, HexStationLocation.CENTER);

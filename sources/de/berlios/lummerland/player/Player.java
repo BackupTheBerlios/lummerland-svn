@@ -21,18 +21,33 @@
 package de.berlios.lummerland.player;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+
+import de.berlios.lummerland.Company;
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.graphics.Color;
+import de.berlios.lummerland.gui.ISpecificStockListener;
+import de.berlios.lummerland.gui.StockAdapter;
+import de.berlios.lummerland.stock.ICertificateHolder;
 /**
  * @author Joerg Zuther
  */
-public class Player {
+public class Player implements ICertificateHolder {
 	private Game game;
 	private Color color;
 	private String name;
 	private int money;
 	private Collection moneyListeners = new ArrayList();
+	private Collection certificates = new ArrayList ();
+    private Collection specificStockListeners = new ArrayList ();
+	
+    /**
+     * @return Returns the certificates.
+     */
+    public Collection getCertificates() {
+        return certificates;
+    }
 	/**
 	 * Constructor for Player.
 	 * 
@@ -129,4 +144,15 @@ public class Player {
 	public void removeMoneyListener(MoneyListener l) {
 		moneyListeners.remove(l);
 	}
+    /**
+     * @param company
+     * @param adapter
+     */
+    public void addSpecificStockListener(ISpecificStockListener l) {
+        specificStockListeners.add (l);
+    }
+    
+    public void removeSpecificStockListener(ISpecificStockListener l) {
+        specificStockListeners.remove (l);
+    }
 }

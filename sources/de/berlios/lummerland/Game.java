@@ -21,8 +21,10 @@
 package de.berlios.lummerland;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import de.berlios.lummerland.board.map.Board;
@@ -38,11 +40,14 @@ public class Game implements Runnable {
 	public static final int Redoing = 2;
 	public static final int StopRequested = 3;
 
+
 	private Board board;
-	private List players = new ArrayList();
+	private Collection companies = new ArrayList ();
+	private Collection players = new ArrayList();
 	private DecisionStack decisionStack = new DecisionStack(this);
 	private GameSchedule gameSchedule;
 	private int roundNumber;
+	
 
 	public Game() {
 		Player redPlayer = new Player(this, Color.Red);
@@ -53,9 +58,22 @@ public class Game implements Runnable {
 		greenPlayer.setName("Green");
 		Player yellowPlayer = new Player(this, Color.Yellow);
 		yellowPlayer.setName("Yellow");
+		
+		new Company (this, "NYC");
+		new Company (this, "NYNH");
+		new Company (this, "C&O");
+		new Company (this, "PRR");
+		
 		board = new Board(this);
 		gameSchedule = new GameSchedule(this);
 	}
+	
+    /**
+     * @return Returns the companies.
+     */
+    public Collection getCompanies() {
+        return companies;
+    }
 
 	/**
 	 * Method getNumberOfPlayers.
@@ -95,20 +113,21 @@ public class Game implements Runnable {
 	 * @return Vector
 	 */
 	public Player getPlayer(Color c) {
-		for (int i = 0; i < players.size(); i++) {
-			Player p = (Player) players.get(i);
-			if (p.getColor() == c) {
-				return p;
+	    for (Iterator iter = players.iterator(); iter.hasNext();) {
+            Player player = (Player) iter.next();
+    		if (player.getColor() == c) {
+				return player;
 			}
-		}
-		return null;
+        }
+	    return null;
+
 	}
 
 	/**
 	 * Returns the players.
 	 * @return List
 	 */
-	public List getPlayers() {
+	public Collection getPlayers() {
 		return players;
 	}
 
@@ -117,9 +136,9 @@ public class Game implements Runnable {
 	 * Returns the player list ordered by score (highest first)
 	 * @return List
 	 */
-	public List getPlayersByScore() {
-		List playersByScore = new ArrayList();
-		playersByScore = players;
+	public Collection getPlayersByScore() {
+	    List playersByScore = new ArrayList();
+		playersByScore = (List) players;
 		Collections.sort(playersByScore, new Comparator() {
 			public int compare(Object o1, Object o2) {
 				if (((Player) o1).getMoney() < ((Player) o2).getMoney()) {
@@ -199,52 +218,13 @@ public class Game implements Runnable {
 		}
 	}
 
-	/**
-	 * @return int
-	 * returns the number of amoebas each player has
-	 */
-	public int getNumberOfAmoebasPerPlayer() {
-		//todo this can't be generic now; correct game preparation is needed
-		return 7;
-		//      int numberOfPlayers = this.getPlayers().size();
-		//
-		//		switch (numberOfPlayers) {
-		//			case 3 :
-		//			case 4 :
-		//				return 7;
-		//			case 5 :
-		//			case 6 :
-		//				return 6;
-		//			default :
-		//		Lummerland.getLogger().error(
-		//			"Illegal number of players: "
-		//				+ numberOfPlayers
-		//				+ " Allowed are 3-6 players.");
-		//				return -1;
-		//		}
-	}
+    /**
+     * @param company
+     */
+    public void addCompany(Company company) {
+        companies.add (company);
+        
+    }
 
-	/**
-	 * @return int
-	 * returns the number of biopoints each player gets each round
-	 * at the beginning of phase4
-	 */
-	public int getNumberOfNewBiopointsPerRoundAndPlayer() {
-		int numberOfPlayers = this.getPlayers().size();
 
-		switch (numberOfPlayers) {
-			case 3 :
-			case 4 :
-				return 10;
-			case 5 :
-			case 6 :
-				return 11;
-			default :
-				Lummerland.getLogger().error(
-					"Illegal number of players: "
-						+ numberOfPlayers
-						+ " Allowed are 3-6 players.");
-				return 0;
-		}
-	}
 }

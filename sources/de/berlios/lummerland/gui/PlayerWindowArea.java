@@ -20,51 +20,44 @@
 
 package de.berlios.lummerland.gui;
 
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Shell;
 
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.gui.layout.LayoutFactory;
-import de.berlios.lummerland.player.Player;
 
 /**
  * @author Zuther
- *
+ * 
  * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ * Window>Preferences>Java>Templates. To enable and disable the creation of type
+ * comments go to Window>Preferences>Java>Code Generation.
  */
 public class PlayerWindowArea extends Canvas {
 
-	private DecisionAdapter decisionAdapter;
+    private DecisionAdapter decisionAdapter;
 
-//	private Game game;
+    //	private Game game;
 
-	public PlayerWindowArea(Shell shell, Game game) {
-		super(shell, SWT.NONE);
+    public PlayerWindowArea(Shell shell, Game game) {
+        super(shell, SWT.NONE);
 
-//		this.game = game;
+        //		this.game = game;
 
-		this.setLayout(LayoutFactory.getHorizontalLayout());
+        this.setLayout(LayoutFactory.getHorizontalLayout());
 
-		List players = game.getPlayers();
-		for (int i = 0; i < players.size(); i++) {
-			new PlayerAdapter(this, (Player) players.get(i));
-		}
+        new PlayerAdapter(this, game);
 
-		decisionAdapter = new DecisionAdapter(this, game);
-		//decisionAdapter.setSize(180, 180);
-	}
+        decisionAdapter = new DecisionAdapter(this, game);
+        //decisionAdapter.setSize(180, 180);
+    }
 
-	/**
-	 * @return
-	 */
-	public DecisionAdapter getDecisionAdapter() {
-		return decisionAdapter;
-	}
+    /**
+     * @return
+     */
+    public DecisionAdapter getDecisionAdapter() {
+        return decisionAdapter;
+    }
 
 }
