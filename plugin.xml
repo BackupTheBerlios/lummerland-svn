@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="LummerlandEngine"
+   name="LummerlandEngine Plug-in"
+   version="0.0.1"
+   provider-name="Gregor Zeitlinger"
+   >
+
+   <runtime>
+      <library name="LummerlandEngine.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.junit"/>
+   </requires>
+   <extension
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run class="de.berlios.lummerland.Game"/>
+      </application>
+   </extension>
+
+</plugin>
