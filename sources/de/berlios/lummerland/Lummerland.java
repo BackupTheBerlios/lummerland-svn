@@ -36,18 +36,16 @@ public class Lummerland
 	private static Lummerland ursuppe;
 	private static Logger logger = null;
 	private boolean stopRequest;
-	/**
-	 * Constructor for Ursuppe.
-	 */
+
+	
 	public Lummerland()
 	{
-//        assert false:new RuntimeException();
-		ursuppe = this;
+        ursuppe = this;
 		//Game
 		Game game = new Game();
 		mainWindow = new MainWindow(game);
 		// for testing
-		Thread gameThread = new Thread(game, "Ursuppe");
+		Thread gameThread = new Thread(game, "Lummerland");
 		gameThread.start();
 		mainWindow.show();
 	}

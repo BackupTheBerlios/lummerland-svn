@@ -216,7 +216,7 @@ public class Game implements Runnable {
 		//			case 6 :
 		//				return 6;
 		//			default :
-		//		Ursuppe.getLogger().error(
+		//		Lummerland.getLogger().error(
 		//			"Illegal number of players: "
 		//				+ numberOfPlayers
 		//				+ " Allowed are 3-6 players.");
