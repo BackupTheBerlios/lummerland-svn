@@ -18,37 +18,41 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.schedule.preparation;
+package de.berlios.lummerland.stock;
 
 import de.berlios.lummerland.Game;
+import de.berlios.lummerland.player.Player;
 import de.berlios.lummerland.schedule.ScheduleComposite;
-import de.berlios.lummerland.schedule.ScheduleItem;
 
 /**
  * @author Joerg Zuther
  */
 
-public class GameSetup extends ScheduleItem {
-
+public class StockRoundSchedule extends ScheduleComposite
+{
+	private int roundNumber;
 	/**
-	 * Constructor for GameSetup.
-	 * @param game
-	 * @param parent
+	 * Constructor for RoundSchedule.
+	 * @param Game game
+	 * @param ScheduleComposite parent
+	 * @param int number
 	 */
-	public GameSetup(Game game, ScheduleComposite parent) {
-		super(game, "GameSetup", parent);
-	}
+	public StockRoundSchedule(Game game, ScheduleComposite parent, int number)
+	{
+		super(game, "Round" + number, parent);
+		this.roundNumber = number;
+		game.setYear(number);
+		
+		Player pdPlayer = game.getPriorityDealHolder ();
+		
+		addSchedule (new StockTurnSchedule (game, this, pdPlayer));
 
-	public void executeBody() {
-		//todo replace the ScheduleItem GameSetup with the complete Setup for the game
-//		game.setRoundNumber(0);
-//		List players = game.getPlayers();
 	}
-
 	/**
-	 * @see de.zeitlinger.ursuppe.schedule.ScheduleItem#undoBody()
+	 * @return
 	 */
-	protected void undoBody() {
-		//todo implement GameSetup.undoBody()
+	public int getRoundNumber() {
+		return roundNumber;
 	}
+
 }

@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
 import de.berlios.lummerland.Game;
-import de.berlios.lummerland.Lummerland;
 import de.berlios.lummerland.decision.Choice;
 import de.berlios.lummerland.decision.Decision;
 import de.berlios.lummerland.gui.layout.LayoutFactory;
@@ -39,7 +38,7 @@ import de.berlios.lummerland.gui.layout.LayoutFactory;
 /**
  * @author Joerg Zuther
  */
-public class DecisionAdapter extends Composite implements DecisionEvaluatorIF {
+public class DecisionAdapter extends Composite implements IDecisionEvaluator {
 
 	protected List list;
 	protected int currentSelection;
@@ -107,7 +106,7 @@ public class DecisionAdapter extends Composite implements DecisionEvaluatorIF {
 	public int updateDecision(final Decision d) {
 		final java.util.List choices = d.getChoices();
 		isRunning = true;
-		Display dis = Lummerland.getInstance().getMainWindow().getDisplay();
+		Display dis = Display.getCurrent();
 		dis.asyncExec(new Runnable() {
 			public void run() {
 				title.setText(d.getQuestion());

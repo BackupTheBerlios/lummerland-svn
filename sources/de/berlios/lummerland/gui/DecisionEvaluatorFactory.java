@@ -27,7 +27,7 @@ import de.berlios.lummerland.Lummerland;
  */
 public class DecisionEvaluatorFactory {
 
-	public static DecisionEvaluatorIF getDecisionEvaluator() {
+	public static IDecisionEvaluator getDecisionEvaluator() {
 		return Lummerland.getInstance().getMainWindow().getDecisionAdapter();
 	}
 }

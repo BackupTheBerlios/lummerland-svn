@@ -18,10 +18,10 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.schedule.preparation;
+package de.berlios.lummerland.setup;
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.schedule.ScheduleComposite;
-import de.berlios.lummerland.schedule.SetupNewRound;
+import de.berlios.lummerland.stock.SetupStockRound;
 /**
  * @author Joerg Zuther
  */
@@ -37,7 +37,7 @@ public class PreparationSchedule extends ScheduleComposite {
 	public PreparationSchedule(Game game, ScheduleComposite parent) {
 		//todo implement the Preparation of the game correctly
 		super(game, "Preparation", parent);
-		this.addSchedule(new GameSetup(game, this));
-		this.addSchedule(new SetupNewRound(game, this));
+		addSchedule(new GameSetup(game, this));
+		addSchedule(new SetupStockRound(game, this));
 	}
 }

@@ -18,35 +18,24 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.schedule;
+package de.berlios.lummerland.setup;
 
 import de.berlios.lummerland.Game;
+import de.berlios.lummerland.schedule.ScheduleComposite;
 
 /**
  * @author Joerg Zuther
  */
 
-public class RoundSchedule extends ScheduleComposite
+public class GameSchedule extends ScheduleComposite
 {
-	private int roundNumber;
 	/**
-	 * Constructor for RoundSchedule.
-	 * @param Game game
-	 * @param ScheduleComposite parent
-	 * @param int number
+	 * Constructor for GameSchedule.
+	 * @param game
 	 */
-	public RoundSchedule(Game game, ScheduleComposite parent, int number)
+	public GameSchedule(Game game)
 	{
-		super(game, "Round" + number, parent);
-		this.roundNumber = number;
-		game.setRoundNumber(number);
-
+		super(game, "Game", null);
+		addSchedule(new PreparationSchedule(game, this));
 	}
-	/**
-	 * @return
-	 */
-	public int getRoundNumber() {
-		return roundNumber;
-	}
-
 }

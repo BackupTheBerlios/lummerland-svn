@@ -28,10 +28,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.berlios.lummerland.board.map.Board;
+import de.berlios.lummerland.company.Company;
 import de.berlios.lummerland.graphics.*;
 import de.berlios.lummerland.player.Player;
 import de.berlios.lummerland.schedule.DecisionStack;
-import de.berlios.lummerland.schedule.GameSchedule;
+import de.berlios.lummerland.setup.GameSchedule;
 
 public class Game implements Runnable {
 	private int state;
@@ -46,9 +47,17 @@ public class Game implements Runnable {
 	private Collection players = new ArrayList();
 	private DecisionStack decisionStack = new DecisionStack(this);
 	private GameSchedule gameSchedule;
-	private int roundNumber;
+	private int year;
+	
+	private Player priorityDealHolder;
 	
 
+    public Player getPriorityDealHolder() {
+        return priorityDealHolder;
+    }
+    public void setPriorityDealHolder(Player priorityDealHolder) {
+        this.priorityDealHolder = priorityDealHolder;
+    }
 	public Game() {
 		Player redPlayer = new Player(this, Color.Red);
 		redPlayer.setName("Red");
@@ -167,16 +176,16 @@ public class Game implements Runnable {
 	 * Returns the roundNumber.
 	 * @return int
 	 */
-	public int getRoundNumber() {
-		return roundNumber;
+	public int getYear() {
+		return year;
 	}
 
 	/**
 	 * Sets the roundNumber.
 	 * @param roundNumber The roundNumber to set
 	 */
-	public void setRoundNumber(int roundNumber) {
-		this.roundNumber = roundNumber;
+	public void setYear(int roundNumber) {
+		this.year = roundNumber;
 	}
 
 	/**
@@ -225,6 +234,7 @@ public class Game implements Runnable {
         companies.add (company);
         
     }
+
 
 
 }

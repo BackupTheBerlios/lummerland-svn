@@ -9,7 +9,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
-import de.berlios.lummerland.Lummerland;
 import de.berlios.lummerland.player.MoneyListener;
 import de.berlios.lummerland.player.Player;
 
@@ -32,7 +31,7 @@ public class MoneyAdapter implements MoneyListener {
         this.player = player;
         
         money = new Text (parent, SWT.PUSH);
-        money.setText("Money: " + player.getMoney());
+        money.setText("" + player.getMoney());
 
         player.addMoneyListener(this);
 
@@ -45,7 +44,7 @@ public class MoneyAdapter implements MoneyListener {
      */
     public void updateMoney() {
 
-        Display d = Lummerland.getInstance().getMainWindow().getDisplay();
+        Display d = Display.getCurrent();
         d.asyncExec(new Runnable() {
             public void run() {
                 money.setText("Money: " + player.getMoney());

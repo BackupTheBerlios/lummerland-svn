@@ -22,7 +22,7 @@ package de.berlios.lummerland.gui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Composite;
 
 import de.berlios.lummerland.Game;
 import de.berlios.lummerland.gui.layout.LayoutFactory;
@@ -40,8 +40,8 @@ public class PlayerWindowArea extends Canvas {
 
     //	private Game game;
 
-    public PlayerWindowArea(Shell shell, Game game) {
-        super(shell, SWT.NONE);
+    public PlayerWindowArea(Composite parent, Game game) {
+        super(parent, SWT.NONE);
 
         //		this.game = game;
 

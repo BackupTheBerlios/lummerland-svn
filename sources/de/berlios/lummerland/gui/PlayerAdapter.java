@@ -26,27 +26,18 @@ import java.util.Iterator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import de.berlios.lummerland.Game;
-import de.berlios.lummerland.Lummerland;
 import de.berlios.lummerland.company.ICompany;
-import de.berlios.lummerland.player.MoneyListener;
 import de.berlios.lummerland.player.Player;
 
 /**
  * @author Joerg Zuther
  */
 public class PlayerAdapter extends Canvas {
-
-    //	public SquareAdapter() {
-    //		super();
-    //	}
-    private Game game;
 
     /**
      * Constructor for SquareAdapter.
@@ -56,8 +47,6 @@ public class PlayerAdapter extends Canvas {
      */
     public PlayerAdapter(Composite parent, Game game) {
         super(parent, SWT.BORDER);
-
-        this.game = game;
 
         GridLayout gridLayout = new GridLayout();
 
@@ -82,30 +71,14 @@ public class PlayerAdapter extends Canvas {
             new Text(this, SWT.PUSH).setText(player.getName());
 
             new MoneyAdapter(this, player);
-            
-            
+
+            for (Iterator iterator = companies.iterator(); iterator.hasNext();) {
+                ICompany company = (ICompany) iterator.next();
+                new StockAdapter(this, player, company);
+            }
+
         }
 
-        new Button(this, SWT.PUSH).setText("B1");
-
-        new Button(this, SWT.PUSH).setText("Wide Button 2");
-
-        new Button(this, SWT.PUSH).setText("Button 3");
-
-        new Button(this, SWT.PUSH).setText("B4");
-
-        new Button(this, SWT.PUSH).setText("Button 5");
-
-        //        name = new Text(this, SWT.DEFAULT);
-        //        name.setText("Name: " + player.getName());
-        //
-        //        color = new Text(this, SWT.DEFAULT);
-        //        color.setText("Color: " + player.getColor().getDescription());
-        //
-        //        money = new Text(this, SWT.DEFAULT);
-        //        money.setText("Money: " + player.getMoney());
-        //
-        //        player.addMoneyListener(this);
     }
 
     public Point computeSize(int wHint, int hHint, boolean changed) {

@@ -18,7 +18,7 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.gui.board;
+package de.berlios.lummerland.gui.board.hex;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,9 +29,9 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Composite;
+
 import de.berlios.lummerland.board.hex.HexEdge;
 import de.berlios.lummerland.board.hex.HexTile;
 import de.berlios.lummerland.board.map.Board;
@@ -40,6 +40,7 @@ import de.berlios.lummerland.board.tile.Connection;
 import de.berlios.lummerland.board.tile.hex.HexStation;
 import de.berlios.lummerland.board.tile.hex.HexStationLocation;
 import de.berlios.lummerland.graphics.Color;
+import de.berlios.lummerland.gui.board.IBoardAdapter;
 
 /**
  * @author Zuther
@@ -56,13 +57,9 @@ public class HexMapAdapter extends Canvas implements PaintListener,
 
     private Collection tiles;
 
-    public HexMapAdapter(Shell shell, Board board) {
-        super(shell, SWT.NONE);
+    public HexMapAdapter(Composite parent, Board board) {
+        super(parent, SWT.NONE);
         tiles = board.getTiles();
-        shell.setLayout(new GridLayout());
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 5;
-        setLayout(layout);
         addPaintListener(this);
     }
 

@@ -2,9 +2,9 @@
  * Created on Jun 15, 2004
  *
  */
-package de.berlios.lummerland;
+package de.berlios.lummerland.company;
 
-import de.berlios.lummerland.company.ICompany;
+import de.berlios.lummerland.Game;
 
 /**
  * @author Gregor

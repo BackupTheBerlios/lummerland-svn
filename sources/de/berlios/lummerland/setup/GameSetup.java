@@ -18,40 +18,39 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.schedule;
+package de.berlios.lummerland.setup;
 
 import de.berlios.lummerland.Game;
+import de.berlios.lummerland.graphics.Color;
+import de.berlios.lummerland.schedule.ScheduleComposite;
+import de.berlios.lummerland.schedule.ScheduleItem;
 
 /**
  * @author Joerg Zuther
  */
 
-public class SetupNewRound extends ScheduleItem {
+public class GameSetup extends ScheduleItem {
 
 	/**
-	 * Constructor for SetupNewRound.
+	 * Constructor for GameSetup.
 	 * @param game
 	 * @param parent
 	 */
-	public SetupNewRound(Game game, ScheduleComposite parent) {
-		super(game, "SetupNewRound", parent);
+	public GameSetup(Game game, ScheduleComposite parent) {
+		super(game, "GameSetup", parent);
 	}
 
-	/**
-	 * @see de.berlios.lummerland.schedule.ScheduleItem#executeBody()
-	 */
 	public void executeBody() {
-
+	    game.setPriorityDealHolder(game.getPlayer(Color.Red));
+		//todo replace the ScheduleItem GameSetup with the complete Setup for the game
+//		game.setRoundNumber(0);
+//		List players = game.getPlayers();
 	}
 
 	/**
-	 * @see de.berlios.lummerland.schedule.ScheduleItem#undoBody()
+	 * @see de.zeitlinger.ursuppe.schedule.ScheduleItem#undoBody()
 	 */
 	protected void undoBody() {
-		if (game.getRoundNumber() < 1) {
-			return;
-		}
-		ScheduleComposite gameSchedule = getAncestorWithName("Game");
-		gameSchedule.removeLastSchedule();
+		//TODO implement GameSetup.undoBody()
 	}
 }

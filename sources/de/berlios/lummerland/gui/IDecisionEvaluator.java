@@ -18,24 +18,13 @@
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  */
 /**************************************************************************/
 
-package de.berlios.lummerland.schedule;
+package de.berlios.lummerland.gui;
 
-import de.berlios.lummerland.Game;
-import de.berlios.lummerland.schedule.preparation.PreparationSchedule;
+import de.berlios.lummerland.decision.Decision;
 
 /**
  * @author Joerg Zuther
  */
-
-public class GameSchedule extends ScheduleComposite
-{
-	/**
-	 * Constructor for GameSchedule.
-	 * @param game
-	 */
-	public GameSchedule(Game game)
-	{
-		super(game, "Game", null);
-		addSchedule(new PreparationSchedule(game, this));
-	}
+public interface IDecisionEvaluator {
+	public int updateDecision(Decision d) ;
 }

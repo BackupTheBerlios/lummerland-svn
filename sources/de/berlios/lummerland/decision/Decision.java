@@ -23,7 +23,7 @@ package de.berlios.lummerland.decision;
 import java.util.List;
 import de.berlios.lummerland.Lummerland;
 import de.berlios.lummerland.gui.DecisionEvaluatorFactory;
-import de.berlios.lummerland.gui.DecisionEvaluatorIF;
+import de.berlios.lummerland.gui.IDecisionEvaluator;
 
 /**
  * @author Joerg Zuther
@@ -90,7 +90,7 @@ public class Decision {
 			result = (Choice) choices.get(0);
 			return 0;
 		}
-		DecisionEvaluatorIF e = DecisionEvaluatorFactory.getDecisionEvaluator();
+		IDecisionEvaluator e = DecisionEvaluatorFactory.getDecisionEvaluator();
 		return e.updateDecision(this);
 	}
 
