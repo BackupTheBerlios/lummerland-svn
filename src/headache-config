@@ -1,6 +1,0 @@
-# Java source
-| ".*\\.java"    -> frame open:"/*" line:"*" close:"*/"
-# Misc
-| ".*Makefile.*" -> frame open:"#"  line:"#" close:"#"
-| ".*README.*"   -> frame open:"*"  line:"*" close:"*"
-| ".*LICENSE.*"  -> frame open:"*"  line:"*" close:"*"
