@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="LummerlandGUI"
+   name="LummerlandGUI"
+   version="0.0.1"
+   provider-name="Gregor Zeitlinger"
+   >
+
+   <runtime>
+      <library name="Lummerland.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.runtime.compatibility"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="LummerlandEngine"/>
+      <import plugin="org.eclipse.ui.views"/>
+   </requires>
+   <extension
+         id="de.berlios.lummerland.gui.RcpApplication"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run class="de.berlios.lummerland.gui.RcpApplication"/>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="de.berlios.lummerland.gui.RcpPerspective"
+            fixed="true"
+            name="LummerlandPerspective"
+            id="de.berlios.lummerland.gui.RcpPerspective"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="LummerlandGUI.category1"
+            id="LummerlandGUI.category1"/>
+      <view
+            allowMultiple="false"
+            class="de.berlios.lummerland.gui.MainView"
+            category="LummerlandGUI.category1"
+            name="de.berlios.lummerland.gui.MainView"
+            id="de.berlios.lummerland.gui.MainView"/>
+   </extension>
+
+</plugin>
