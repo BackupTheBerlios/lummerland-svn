@@ -27,7 +27,8 @@ import de.berlios.lummerland.Game;
 import de.berlios.lummerland.board.hex.HexEdge;
 import de.berlios.lummerland.board.hex.HexTile;
 import de.berlios.lummerland.board.tile.Connection;
-import de.berlios.lummerland.board.tile.Station;
+import de.berlios.lummerland.board.tile.hex.HexStation;
+import de.berlios.lummerland.board.tile.hex.HexStationLocation;
 public class Board
 {
 
@@ -54,10 +55,12 @@ public class Board
 	public Collection getTiles() {
 		// TODO Auto-generated method stub
 		Collection stations = new ArrayList ();
-		stations.add(new Station (10));
+		
+		HexStation hexStation = new HexStation (10, 1, HexStationLocation.CENTER);
+        stations.add(hexStation);
 		
 		Collection connections = new ArrayList ();
-		connections.add (new Connection (HexEdge.NORTH, HexEdge.SOUTH));
+		connections.add (new Connection (HexEdge.NORTH, hexStation));
 		connections.add (new Connection (HexEdge.NORTH, HexEdge.SOUTHWEST));
 		connections.add (new Connection (HexEdge.NORTH, HexEdge.SOUTHEAST));
 		

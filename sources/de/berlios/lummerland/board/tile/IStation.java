@@ -34,5 +34,7 @@ package de.berlios.lummerland.board.tile;
  */
 public interface IStation {
 	int getValue();
+	
+	int getTokenCapacity ();
 
 }

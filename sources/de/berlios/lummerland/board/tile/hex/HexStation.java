@@ -24,31 +24,54 @@
  * To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package de.berlios.lummerland.board.tile;
+package de.berlios.lummerland.board.tile.hex;
+
+import de.berlios.lummerland.board.tile.IStation;
 
 /**
  * @author Gregor
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ * To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Generation - Code and Comments
  */
-public class Station implements IStation{
+public class HexStation implements IStation {
 
-	private int fValue;
+    private int value;
+    private int tokenCapacity;
+    private HexStationLocation location;
+    
+    
 
-	/**
-	 * @param i
-	 */
-	public Station(int value) {
-		
-		fValue = value;
-	}
+    /**
+     * @param i
+     */
+    public HexStation(int value, int tokenCapacity, HexStationLocation location) {
 
-	/* (non-Javadoc)
-	 * @see de.berlios.lummerland.board.tile.IStation#getValue()
-	 */
-	public int getValue() {
-		// TODO Auto-generated method stub
-		return fValue;
-	}
+        this.value = value;
+        this.tokenCapacity = tokenCapacity;
+        this.location = location;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.berlios.lummerland.board.tile.IStation#getValue()
+     */
+    public int getValue() {
+        return value;
+    }
+
+    /**
+     * @return Returns the location.
+     */
+    public HexStationLocation getLocation() {
+        return location;
+    }
+
+    /**
+     * @return Returns the tokenCapacity.
+     */
+    public int getTokenCapacity() {
+        return tokenCapacity;
+    }
 }
